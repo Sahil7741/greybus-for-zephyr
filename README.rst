@@ -48,10 +48,10 @@ Lastly, flash firmware for the chosen ``$BOARD`` using the commands below.
 
     cd zephyr
     source zephyr-env.sh
-    git apply ../greybus/zephyr-gpio-get-direction.patch
-    git apply ../greybus/zephyr-sys-byteorder-posix.patch
-    git apply ../greybus/zephyr-dynamic-pthread-stacks.patch
-    west build -b $BOARD -t flash ../greybus/samples/subsys/greybus/net
+    git apply ../modules/greybus/zephyr-gpio-get-direction.patch
+    git apply ../modules/greybus/zephyr-sys-byteorder-posix.patch
+    git apply ../modules/greybus/zephyr-dynamic-pthread-stacks.patch
+    west build -b $BOARD -t flash ../modules/greybus/samples/subsys/greybus/net
 
 A number of patches are required until respective functionality is added upstream in
 the Zephyr Project.
@@ -67,7 +67,7 @@ above should be modified as shown below.
 
 .. code-block:: bash
 
-    west build -b $BOARD -t flash ../greybus/samples/subsys/greybus/net \
+    west build -b $BOARD -t flash ../modules/greybus/samples/subsys/greybus/net \
         -- -DOVERLAY_CONFIG="overlay-802154.conf"
 
 Bluetooth Low Energy Overlay
@@ -78,7 +78,7 @@ above should be modified as shown below.
 
 .. code-block:: bash
 
-    west build -b $BOARD -t flash ../greybus/samples/subsys/greybus/net \
+    west build -b $BOARD -t flash ../modules/greybus/samples/subsys/greybus/net \
         -- -DOVERLAY_CONFIG="overlay-bt.conf"
 
 Network Configuration
