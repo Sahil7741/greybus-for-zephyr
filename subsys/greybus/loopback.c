@@ -56,7 +56,7 @@ struct gb_loopback {
 };
 
 struct list_head gb_loopback_list = LIST_INIT(gb_loopback_list);
-static pthread_mutex_t gb_loopback_list_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t gb_loopback_list_mutex = POSIX_THREADS_INITIALIZER;
 
 static void loopback_list_lock(void)
 {

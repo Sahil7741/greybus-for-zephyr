@@ -28,7 +28,7 @@
  * Author: Fabien Parent <fparent@baylibre.com>
  */
 
-#include <sys/byteorder.h>
+#include <zephyr/sys/byteorder.h>
 #include <greybus/greybus.h>
 #include <usb.h>
 #include "usb-gb.h"

@@ -32,11 +32,11 @@
 #include <errno.h>
 // #include <queue.h>
 
-// #include <device.h>
+// #include <zephyr/device.h>
 // #include <device_camera.h>
 #include <greybus/greybus.h>
 // #include <apps/greybus-utils/utils.h>
-#include <sys/byteorder.h>
+#include <zephyr/sys/byteorder.h>
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(greybus_camera, CONFIG_GREYBUS_LOG_LEVEL);

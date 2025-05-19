@@ -37,7 +37,7 @@ const struct gb_transport_backend *gb_transport_get_backend(void)
 	return xport;
 }
 
-static int greybus_service_init(const struct device *bus)
+static int greybus_service_init(void)
 {
 	int r;
 	uint8_t *mnfb;

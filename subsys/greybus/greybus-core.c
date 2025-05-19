@@ -48,7 +48,7 @@
 /* For some reason, not declared even with _GNU_SOURCE */
 extern int pthread_setname_np(pthread_t thread, const char *name);
 
-#define DEFAULT_STACK_SIZE PTHREAD_STACK_MIN
+#define DEFAULT_STACK_SIZE POSIX_THREADS_STACK_MIN
 
 #else
 
