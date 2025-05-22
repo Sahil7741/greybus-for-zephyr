@@ -20,39 +20,39 @@ zephyr_library_sources(
   platform/interface.c
   platform/string.c)
 
-  # Manually generate greybus.mnfs and greybus.mnfb
-set(MANIFEST_SRC ${CMAKE_CURRENT_SOURCE_DIR}/control.mnfs)
-set(MANIFEST_OUT ${ZEPHYR_BINARY_DIR}/zephyr/include/generated/greybus.mnfs)
-set(MANIFEST_BIN ${ZEPHYR_BINARY_DIR}/zephyr/include/generated/greybus.mnfb)
+#   # Manually generate greybus.mnfs and greybus.mnfb
+# set(MANIFEST_SRC ${CMAKE_CURRENT_SOURCE_DIR}/control.mnfs)
+# set(MANIFEST_OUT ${ZEPHYR_BINARY_DIR}/zephyr/include/generated/greybus.mnfs)
+# set(MANIFEST_BIN ${ZEPHYR_BINARY_DIR}/zephyr/include/generated/greybus.mnfb)
 
-add_custom_command(
-    OUTPUT ${MANIFEST_OUT}
-    COMMAND ${PYTHON_EXECUTABLE}
-            ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/manifesto/manifesto
-            -I mnfs
-            -O mnfs
-            -o ${MANIFEST_OUT}
-            ${MANIFEST_SRC}
-    DEPENDS ${MANIFEST_SRC}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Generating greybus.mnfs"
-)
+# add_custom_command(
+#     OUTPUT ${MANIFEST_OUT}
+#     COMMAND ${PYTHON_EXECUTABLE}
+#             ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/manifesto/manifesto
+#             -I mnfs
+#             -O mnfs
+#             -o ${MANIFEST_OUT}
+#             ${MANIFEST_SRC}
+#     DEPENDS ${MANIFEST_SRC}
+#     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#     COMMENT "Generating greybus.mnfs"
+# )
 
-add_custom_command(
-    OUTPUT ${MANIFEST_BIN}
-    COMMAND ${PYTHON_EXECUTABLE}
-            ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/manifesto/manifesto
-            -I mnfs
-            -O mnfb
-            -o ${MANIFEST_BIN}
-            ${MANIFEST_OUT}
-    DEPENDS ${MANIFEST_OUT}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Generating greybus.mnfb"
-)
+# add_custom_command(
+#     OUTPUT ${MANIFEST_BIN}
+#     COMMAND ${PYTHON_EXECUTABLE}
+#             ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/manifesto/manifesto
+#             -I mnfs
+#             -O mnfb
+#             -o ${MANIFEST_BIN}
+#             ${MANIFEST_OUT}
+#     DEPENDS ${MANIFEST_OUT}
+#     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#     COMMENT "Generating greybus.mnfb"
+# )
 
-add_custom_target(greybus_manifest DEPENDS ${MANIFEST_OUT} ${MANIFEST_BIN})
-add_dependencies(app greybus_manifest)
+# add_custom_target(greybus_manifest DEPENDS ${MANIFEST_OUT} ${MANIFEST_BIN})
+# add_dependencies(app greybus_manifest)
 
 if(CONFIG_GREYBUS_MANIFEST_BUILTIN)
 
