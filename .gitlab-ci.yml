@@ -1,7 +1,6 @@
 image: zephyrprojectrtos/zephyr-build:v0.26.13
 
-build:
-  stage: build
+.common:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   before_script:
@@ -12,7 +11,19 @@ build:
     - pip3 install -r ../zephyr/scripts/requirements-base.txt
   script:
     - source ../zephyr/zephyr-env.sh
-    - west build -b beagleconnect_freedom samples/subsys/greybus/net/ -p -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
+    - west build -p always -b $BOARD samples/subsys/greybus/net/
   artifacts:
     paths:
       - build/zephyr/zephyr.bin
+
+build_beagleconnect_freedom:
+  extends: .common
+  variables:
+    BOARD: beagleconnect_freedom
+  stage: build
+
+build_beagleplay_cc1352p7:
+  extends: .common
+  variables:
+    BOARD: beagleplay/cc1352p7
+  stage: build
