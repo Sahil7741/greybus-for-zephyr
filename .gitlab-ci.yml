@@ -25,5 +25,5 @@ build_beagleconnect_freedom:
 build_beagleplay_cc1352p7:
   extends: .common
   variables:
-    BOARD: beagleplay
+    BOARD: beagleplay/cc1352p7
   stage: build
