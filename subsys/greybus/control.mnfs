@@ -1,0 +1,10 @@
+[manifest-header]
+version-major = 0
+version-minor = 1
+
+[bundle-descriptor 0]
+class = 0x00
+
+[cport-descriptor 0]
+bundle = 0
+protocol = 0x00

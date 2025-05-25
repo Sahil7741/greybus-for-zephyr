@@ -4,10 +4,8 @@ manifest:
   remotes:
     - name: zephyrproject-rtos
       url-base: https://github.com/zephyrproject-rtos
-    - name: beagle-sdk
-      url-base: https://openbeagle.org/beagleconnect/zephyr
   projects:
     - name: zephyr
-      remote: beagle-sdk
-      revision: demo
+      remote: zephyrproject-rtos
+      revision: main
       import: true
