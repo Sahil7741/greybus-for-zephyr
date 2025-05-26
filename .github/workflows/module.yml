@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: "zephyrprojectrtos/ci:v0.11.10"
+      image: "zephyrprojectrtos/zephyr-build:v0.27.5"
     # This only works with the "matrix" strategy
     #fail-fast: false
     env:
