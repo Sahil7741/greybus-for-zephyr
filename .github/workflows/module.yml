@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: "zephyrprojectrtos/zephyr-build:v0.27.5"
+      options: --user root
     # This only works with the "matrix" strategy
     #fail-fast: false
     env:
