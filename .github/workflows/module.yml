@@ -31,14 +31,14 @@ jobs:
         west init -l greybus
         west update
         cd ${ZEPHYR_BASE}
-        git apply ${GB}/zephyr-sys-byteorder-posix.patch
-        git apply ${GB}/zephyr-gpio-get-direction.patch
-        git apply ${GB}/zephyr-dynamic-pthread-stacks.patch
+        # git apply ${GB}/zephyr-sys-byteorder-posix.patch
+        # git apply ${GB}/zephyr-gpio-get-direction.patch
+        # git apply ${GB}/zephyr-dynamic-pthread-stacks.patch
         # "loop-socat.sh &" needs to called in order to run tests under
         # qemu. Otherwise, there is an error like the one below:
         # stty: 'standard input': Inappropriate ioctl for device
         # ERROR - qemu_cortex_m3 subsys.greybus.gpio FAILED: Exited with 2
-        ${WS}/tools/net-tools/loop-socat.sh &
+        # ${WS}/tools/net-tools/loop-socat.sh &
 
     - name: GPIO
       run: |
