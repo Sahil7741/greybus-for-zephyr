@@ -40,6 +40,10 @@ jobs:
         # ERROR - qemu_cortex_m3 subsys.greybus.gpio FAILED: Exited with 2
         # ${WS}/tools/net-tools/loop-socat.sh &
 
+    - name: Build for beagleconnect_freedom
+      run: |
+        cd ${ZEPHYR_BASE}
+        west build -b beagleconnect_freedom -p always ${GB}/samples/subsys/greybus/net
     - name: GPIO
       run: |
         cd ${ZEPHYR_BASE}
