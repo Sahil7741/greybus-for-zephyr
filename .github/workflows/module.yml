@@ -28,9 +28,16 @@ jobs:
 
     - name: Setup Environment
       run: |
+        pip3 install west
         west init -l greybus
         west update
-        cd ${ZEPHYR_BASE}
+        source ${ZEPHYR_BASE}/zephyr-env.sh
+        echo "ZEPHYR_BASE: $ZEPHYR_BASE"
+        echo "ZEPHYR_SDK_INSTALL_DIR: $ZEPHYR_SDK_INSTALL_DIR"
+        echo "PATH: $PATH"
+        #west init -l greybus
+        #west update
+        #cd ${ZEPHYR_BASE}
         # git apply ${GB}/zephyr-sys-byteorder-posix.patch
         # git apply ${GB}/zephyr-gpio-get-direction.patch
         # git apply ${GB}/zephyr-dynamic-pthread-stacks.patch
