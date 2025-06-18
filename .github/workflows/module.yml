@@ -28,13 +28,18 @@ jobs:
 
     - name: Setup Environment
       run: |
-        pip3 install west
-        west init -l greybus
-        west update
-        source ${ZEPHYR_BASE}/zephyr-env.sh
+        west init -l greybus || { echo "west init failed"; exit 1; }
+        west update || { echo "west update failed"; exit 1; }
+        if [ ! -d "${ZEPHYR_BASE}" ]; then
+            echo "Error: ZEPHYR_BASE directory ${ZEPHYR_BASE} does not exist"
+            exit 1
+        fi
+        . ${ZEPHYR_BASE}/zephyr-env.sh || { echo "Failed to source zephyr-env.sh"; exit 1; }
         echo "ZEPHYR_BASE: $ZEPHYR_BASE"
         echo "ZEPHYR_SDK_INSTALL_DIR: $ZEPHYR_SDK_INSTALL_DIR"
         echo "PATH: $PATH"
+        which west || { echo "west not found in PATH"; exit 1; }
+        which cmake || { echo "cmake not found in PATH"; exit 1; }
         #west init -l greybus
         #west update
         #cd ${ZEPHYR_BASE}
