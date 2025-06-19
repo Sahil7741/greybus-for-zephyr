@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
+#ifdef CONFIG_GREYBUS_MIKROBUS
+
 #include <stdint.h>
 #include <zephyr/kernel.h>
 
@@ -256,3 +258,5 @@ int manifest_get_fragment_clickid(uint8_t **mnfb, size_t *mnfb_size, uint8_t id)
 			      CONFIG_GREYBUS_MIKROBUS_INIT_PRIORITY, NULL);
 
 DT_INST_FOREACH_STATUS_OKAY(DEFINE_MIKROBUS);
+
+#endif /* CONFIG_GREYBUS_MIKROBUS */

@@ -28,11 +28,13 @@ static unsigned char greybus_manifest_click2_fragment_builtin[] = {
 #endif /* CONFIG_GREYBUS_MANIFEST_BUILTIN */
 
 #include "../greybus-manifest.h"
+#ifdef CONFIG_GREYBUS_MIKROBUS
 #include "mikrobus.h"
+#endif
 
 int manifest_get(uint8_t **mnfb, size_t *mnfb_size)
 {
-	int r = -ENOENT;
+  int r = -ENOENT;
 
 	if (IS_ENABLED(CONFIG_GREYBUS_MANIFEST_BUILTIN)) {
 		*mnfb = (uint8_t *)greybus_manifest_builtin;
@@ -58,8 +60,11 @@ int manifest_get_fragment(uint8_t **mnfb, size_t *mnfb_size, uint8_t id)
 			return id;
 		}
 		r = 0;
-	} else {
-		r = manifest_get_fragment_clickid(mnfb, mnfb_size, id);
 	}
+#ifdef CONFIG_GREYBUS_MIKROBUS
+  else {
+		r = manifest_get_fragment_clickid(mnfb, mnfb_size, id);
+  }
+#endif
 	return r;
 }

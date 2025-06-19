@@ -300,6 +300,15 @@ config GREYBUS_CPORT_INIT_PRIORITY
 	help
 	  Greybus cport init priority to ensure device initialization order.
 
+config GREYBUS_MIKROBUS
+    bool "Greybus MikroBUS support"
+    depends on GPIO
+    default n
+    help
+      Enable MikroBUS support in Greybus. MikroBUS is not part of the
+      official Greybus specification. If you're not using MikroBUS boards,
+      you can disable this to ensure compatibility with standard kernels.
+
 module = GREYBUS
 module-str = Greybus
 source "subsys/logging/Kconfig.template.log_config"
