@@ -330,9 +330,11 @@ static int identify_descriptor(struct greybus_descriptor *desc, size_t size, int
 		expected_size += sizeof(struct greybus_descriptor_device);
 		g_greybus.max_device_id = MAX(g_greybus.max_device_id, desc->device.id);
 		break;
+#ifdef CONFIG_GREYBUS_MIKROBUS
 	case GREYBUS_TYPE_MIKROBUS:
 		expected_size += sizeof(struct greybus_descriptor_mikrobus);
 		break;
+#endif
 	case GREYBUS_TYPE_INVALID:
 	default:
 		LOG_ERR("invalid descriptor type (%hhu)", desc_header->type);
@@ -408,9 +410,11 @@ static int identify_patch_descriptor(struct greybus_descriptor *desc, size_t siz
 		desc->device.driver_stringid += g_greybus.max_string_id;
 		g_greybus.max_patch_device_id = MAX(g_greybus.max_patch_device_id, desc->device.id);
 		break;
+#ifdef CONFIG_GREYBUS_MIKROBUS
 	case GREYBUS_TYPE_MIKROBUS:
 		expected_size += sizeof(struct greybus_descriptor_mikrobus);
 		break;
+#endif
 	case GREYBUS_TYPE_INVALID:
 	default:
 		LOG_ERR("invalid descriptor type (%hhu)", desc_header->type);
