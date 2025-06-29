@@ -12,24 +12,32 @@ jobs:
     env:
       ZEPHYR_BASE: ${{ github.workspace }}/zephyr
       ZEPHYR_TOOLCHAIN_VARIANT: zephyr
-      ZEPHYR_SDK_INSTALL_DIR: /opt/sdk/zephyr-sdk
+      ZEPHYR_SDK_INSTALL_DIR: /opt/toolchains
       WS: ${{ github.workspace }}
       GB: ${{ github.workspace }}/greybus
-      PATH: ${{ github.workspace }}/zephyr/scripts:${{ github.workspace }}/tools/net-tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      # Ensure Python venv is in PATH (from the Dockerfile)
+      PATH: /opt/python/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         submodules: true
         path: greybus
 
-    - name: Setup Environment
+    - name: Verify West Installation
       run: |
+        echo "Checking west installation..."
+        which west
+        west --version
+        echo "Python path: $(which python3)"
+        echo "PATH: $PATH"
+
+    - name: Initialize West Workspace
+      run: |
+        cd ${{ github.workspace }}
         west init -l greybus
         west update
-        cd ${ZEPHYR_BASE}
-        ${WS}/tools/net-tools/loop-socat.sh &
 
     - name: Build for beagleconnect_freedom
       run: |
