@@ -25,20 +25,9 @@ jobs:
         submodules: true
         path: greybus
 
-    - name: Debug Workspace Structure
-      run: |
-        echo "Current directory: $(pwd)"
-        echo "Workspace: ${{ github.workspace }}"
-        echo "Contents of current directory:"
-        ls -la
-        echo "Contents of workspace:"
-        ls -la ${{ github.workspace }} || echo "Workspace directory doesn't exist"
-        mkdir -p ${{ github.workspace }}
-        echo "Created workspace directory"
-
     - name: Initialize West Workspace
       run: |
-        cd ${{ github.workspace }}
+        # Work in the current directory where greybus actually exists
         pwd
         ls -la
         west init -l greybus
@@ -46,5 +35,9 @@ jobs:
 
     - name: Build for beagleconnect_freedom
       run: |
+        # Update paths to use current working directory
+        export ZEPHYR_BASE=$(pwd)/zephyr
+        export GB=$(pwd)/greybus
+        
         cd ${ZEPHYR_BASE}
         west build -b beagleconnect_freedom -p always ${GB}/samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
