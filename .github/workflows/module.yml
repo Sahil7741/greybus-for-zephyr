@@ -25,17 +25,22 @@ jobs:
         submodules: true
         path: greybus
 
-    - name: Verify West Installation
+    - name: Debug Workspace Structure
       run: |
-        echo "Checking west installation..."
-        which west
-        west --version
-        echo "Python path: $(which python3)"
-        echo "PATH: $PATH"
+        echo "Current directory: $(pwd)"
+        echo "Workspace: ${{ github.workspace }}"
+        echo "Contents of current directory:"
+        ls -la
+        echo "Contents of workspace:"
+        ls -la ${{ github.workspace }} || echo "Workspace directory doesn't exist"
+        mkdir -p ${{ github.workspace }}
+        echo "Created workspace directory"
 
     - name: Initialize West Workspace
       run: |
         cd ${{ github.workspace }}
+        pwd
+        ls -la
         west init -l greybus
         west update
 
