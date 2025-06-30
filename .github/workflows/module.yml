@@ -15,7 +15,6 @@ jobs:
       ZEPHYR_SDK_INSTALL_DIR: /opt/toolchains
       WS: ${{ github.workspace }}
       GB: ${{ github.workspace }}/greybus
-      # Ensure Python venv is in PATH (from the Dockerfile)
       PATH: /opt/python/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       
     steps:
@@ -27,7 +26,6 @@ jobs:
 
     - name: Initialize West Workspace
       run: |
-        # Work in the current directory where greybus actually exists
         pwd
         ls -la
         west init -l greybus
@@ -35,9 +33,9 @@ jobs:
 
     - name: Build for beagleconnect_freedom
       run: |
-        # Update paths to use current working directory
+
         export ZEPHYR_BASE=$(pwd)/zephyr
         export GB=$(pwd)/greybus
         
         cd ${ZEPHYR_BASE}
-        west build -b beagleconnect_freedom -p always ${GB}/samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
+        west build -b beagleconnect_freedom -p always ${GB}/samples/subsys greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
