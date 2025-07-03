@@ -28,7 +28,7 @@ jobs:
       run: |
         pwd
         ls -la
-        west init -m https://github.com/Sahil7741/greybus-for-zephyr.git --mr test-ci
+        west init -l greybus
         west update
 
     - name: Build for beagleconnect_freedom
