@@ -36,4 +36,6 @@ jobs:
         export ZEPHYR_BASE=$(pwd)/zephyr
         export GB=$(pwd)/greybus
         
+        source zephyr/zephyr-env.sh
+        
         west build -b beagleconnect_freedom -p always ${GB}/samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
