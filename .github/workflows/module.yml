@@ -29,7 +29,7 @@ jobs:
         pwd
         ls -la
         west init -l greybus
-    #     west update
+        west update
 
     - name: Build for beagleconnect_freedom
       run: |
