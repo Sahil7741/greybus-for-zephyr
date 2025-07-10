@@ -10,7 +10,12 @@ jobs:
       image: "zephyrprojectrtos/ci:latest"
     
     env:
-      CMAKE_PREFIX_PATH: /opt/toolchains
+      CMAKE_PREFIX_PATH: /opt/toolchains:${{ github.workspace }}/zephyr/share/zephyr-package/cmake
+      ZEPHYR_TOOLCHAIN_VARIANT: zephyr
+      ZEPHYR_SDK_INSTALL_DIR: /opt/toolchains
+      ZEPHYR_BASE: ${{ github.workspace }}/zephyr
+      WS: ${{ github.workspace }}
+      GB: ${{ github.workspace }}/greybus
       
     steps:
     - name: Checkout
@@ -21,22 +26,9 @@ jobs:
 
     - name: Initialize West Workspace
       run: |
-        pwd
-        ls -la
         west init -l greybus
         west update
 
     - name: Build for beagleconnect_freedom
       run: |
-        echo "Current directory: $(pwd)"
-        echo "Contents:"
-        ls -la
-        echo "Zephyr directory:"
-        ls -la zephyr/ | head -10
-        
-        # The container already sets ZEPHYR_TOOLCHAIN_VARIANT=zephyr
-        # and has the SDK in /opt/toolchains, so we just need to set ZEPHYR_BASE
-        export ZEPHYR_BASE=$(pwd)/zephyr
-        export CMAKE_PREFIX_PATH=/opt/toolchains:$(pwd)/zephyr/share/zephyr-package/cmake
-        
         west build -b beagleconnect_freedom -p always greybus/samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
