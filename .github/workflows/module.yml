@@ -10,12 +10,7 @@ jobs:
       image: "zephyrprojectrtos/ci:latest"
     
     env:
-      ZEPHYR_BASE: ${{ github.workspace }}/zephyr
-      ZEPHYR_TOOLCHAIN_VARIANT: zephyr
-      ZEPHYR_SDK_INSTALL_DIR: /opt/toolchains
-      WS: ${{ github.workspace }}
-      GB: ${{ github.workspace }}/greybus
-      PATH: /opt/python/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      CMAKE_PREFIX_PATH: /opt/toolchains
       
     steps:
     - name: Checkout
