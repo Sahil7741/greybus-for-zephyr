@@ -33,7 +33,4 @@ jobs:
 
     - name: Build for beagleconnect_freedom
       run: |
-        . zephyr/zephyr-env.sh
-        
-        west build -b beagleconnect_freedom -p always ${GB}/samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
-      shell: bash
+        west build -b beagleconnect_freedom -p always greybus/samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
