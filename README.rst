@@ -7,7 +7,9 @@ Greybus for Zephyr
 
 Build Status
 ############
-.. image:: https://openbeagle.org/beagleconnect/zephyr/greybus-for-zephyr/badges/main/pipeline.svg
+.. image:: https://github.com/Sahil7741/greybus-for-zephyr/actions/workflows/module.yml/badge.svg
+   :target: https://github.com/Sahil7741/greybus-for-zephyr/actions/workflows/module.yml
+   :alt: Greybus Module CI
 
 Overview
 ########
