@@ -13,11 +13,17 @@ jobs:
       with:
         path: greybus
 
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.12
+
     - name: Setup Zephyr project
       uses: zephyrproject-rtos/action-zephyr-setup@v1
       with:
         app-path: greybus
         toolchains: arm-zephyr-eabi
+        manifest-file-name: west.yml
 
     - name: Build for beagleconnect_freedom
       run: |
@@ -26,7 +32,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: cc1352-firmware
+        name: greybus-beagleconnect-freedom-firmware
         path: |
           build/zephyr/zephyr.bin
         compression-level: 0
