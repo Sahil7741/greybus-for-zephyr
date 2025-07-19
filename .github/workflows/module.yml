@@ -27,7 +27,7 @@ jobs:
 
     - name: Build for beagleconnect_freedom
       run: |
-        west build -b beagleconnect_freedom -p always greybus/samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
+        west build -b beagleconnect_freedom greybus/samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
