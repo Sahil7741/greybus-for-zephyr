@@ -23,8 +23,32 @@ jobs:
         toolchains: arm-zephyr-eabi
         manifest-file-name: west.yml
 
+    - name: Update west workspace
+      run: |
+        echo "Current west config:"
+        west config --list || true
+        echo "Manually updating west workspace..."
+        west update --fetch-opt="--depth=1"
+        echo "West status after update:"
+        west status
+        echo "Checking Zephyr directory:"
+        ls -la zephyr/ || echo "Zephyr directory not found"
+        echo "Looking for zephyr-env.sh:"
+        find . -name "zephyr-env.sh" 2>/dev/null || echo "zephyr-env.sh not found anywhere"
+
     - name: Build for beagleconnect_freedom
       run: |
+        # Set Zephyr environment variables manually
+        export ZEPHYR_BASE=$(pwd)/zephyr
+        export CMAKE_PREFIX_PATH="$ZEPHYR_BASE/share/zephyr-package/cmake"
+        
+        # Verify environment
+        echo "ZEPHYR_BASE: $ZEPHYR_BASE"
+        echo "CMAKE_PREFIX_PATH: $CMAKE_PREFIX_PATH"
+        echo "Checking Zephyr CMake files:"
+        ls -la "$ZEPHYR_BASE/share/zephyr-package/cmake/" || echo "CMake files not found"
+        
+        # Build the sample
         west build -b beagleconnect_freedom samples/subsys/greybus/net -- -DEXTRA_CONF_FILE=overlay-802154-subg.conf
 
     - name: Upload artifacts
