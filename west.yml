@@ -1,9 +1,11 @@
 manifest:
   self:
-    path: greybus
+    west-commands: scripts/west-commands.yml
+
   remotes:
     - name: zephyrproject-rtos
       url-base: https://github.com/zephyrproject-rtos
+
   projects:
     - name: zephyr
       remote: zephyrproject-rtos
@@ -11,4 +13,5 @@ manifest:
       import:
         name-allowlist:
           - hal_ti
-          - cmsis
+          - cmsis_6
+          
