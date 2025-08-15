@@ -2,6 +2,7 @@
 
 import os
 import sys
+import re
 from manifesto import *
 
 
@@ -37,20 +38,21 @@ def get_mikrobus_descriptor(defines):
     mikrobus = None
     for key in defines:
         val = defines[key]
-        if key.endswith('_P_compatible_IDX_0') and val == '"zephyr,greybus-mikrobus"':
+        # Accept both legacy and current compatibles for MikroBUS
+        if key.endswith('_P_compatible_IDX_0') and val in ('"zephyr,greybus-mikrobus"', '"zephyr,greybus-mikrobusid"'):
             node = key[:-len('_P_compatible_IDX_0')]
-            pwm = int(defines[node + '_P_pwmstate'])
-            _int = int(defines[node + '_P_intstate'])
-            rx = int(defines[node + '_P_rxstate'])
-            tx = int(defines[node + '_P_txstate'])
-            scl = int(defines[node + '_P_sclstate'])
-            sda = int(defines[node + '_P_sdastate'])
-            mosi = int(defines[node + '_P_mosistate'])
-            miso = int(defines[node + '_P_misostate'])
-            sck = int(defines[node + '_P_sckstate'])
-            cs = int(defines[node + '_P_csstate'])
-            rst = int(defines[node + '_P_rststate'])
-            an = int(defines[node + '_P_anstate'])
+            pwm = int(defines.get(node + '_P_pwmstate', '0'))
+            _int = int(defines.get(node + '_P_intstate', '0'))
+            rx = int(defines.get(node + '_P_rxstate', '0'))
+            tx = int(defines.get(node + '_P_txstate', '0'))
+            scl = int(defines.get(node + '_P_sclstate', '0'))
+            sda = int(defines.get(node + '_P_sdastate', '0'))
+            mosi = int(defines.get(node + '_P_mosistate', '0'))
+            miso = int(defines.get(node + '_P_misostate', '0'))
+            sck = int(defines.get(node + '_P_sckstate', '0'))
+            cs = int(defines.get(node + '_P_csstate', '0'))
+            rst = int(defines.get(node + '_P_rststate', '0'))
+            an = int(defines.get(node + '_P_anstate', '0'))
             mikrobus = MikrobusDescriptor(pwm, _int, rx, tx, scl, \
                             sda, mosi, miso, sck, cs, rst, an, None)
             break
@@ -165,29 +167,75 @@ def dt2mnfs(fn):
                 val = line[len(key + ' '):]
                 val = val.strip()
                 defines[key] = val
+
+    # Feature gates: default to excluding non-standard descriptors for Linux host compatibility
+    include_device = os.getenv('GBUTIL_INCLUDE_DEVICE_DESC', '0').lower() in ('1','true','yes','y')
+    include_property = os.getenv('GBUTIL_INCLUDE_PROPERTY_DESC', '0').lower() in ('1','true','yes','y')
+    include_mikrobus = os.getenv('GBUTIL_INCLUDE_MIKROBUS_DESC', '0').lower() in ('1','true','yes','y')
+
     interface_desc = get_interface_descriptor(defines)
-    mikrobus_desc = get_mikrobus_descriptor(defines)
+
+    mikrobus_desc = None
+    if include_mikrobus:
+        mikrobus_desc = get_mikrobus_descriptor(defines)
+
+    # Only parse devices/properties when enabled to avoid referencing unavailable classes
+    device_descs = {}
+    if include_device:
+        device_descs = get_device_descriptors(defines)
+
+    property_descs = {}
+    if include_property:
+        property_descs = get_property_descriptors(defines)
+
+    # Strings, bundles, cports
     string_descs = get_string_descriptors(defines, interface_desc)
     bundle_descs = get_bundle_descriptors(defines)
-    device_descs = get_device_descriptors(defines)
-    property_descs = get_property_descriptors(defines)
     cport_descs = get_cport_descriptors(defines)
+
+    # Determine which strings are actually referenced
+    used_string_ids = set()
+    if interface_desc is not None:
+        used_string_ids.add(interface_desc.vsid)
+        used_string_ids.add(interface_desc.psid)
+    if include_device:
+        for d in device_descs:
+            try:
+                # props[0] holds driver string id per get_device_descriptors()
+                used_string_ids.add(device_descs[d].props[0])
+            except Exception:
+                pass
+    if include_property:
+        for p in property_descs:
+            try:
+                used_string_ids.add(property_descs[p].name_stringid)
+            except Exception:
+                pass
 
     m = Manifest()
     m.add_header(ManifestHeader(0, 1))
 
-    for d in string_descs:
-        m.add_string_desc(string_descs[d])
+    # Only add used strings to avoid "excess descriptors" on host
+    for sid in sorted(used_string_ids):
+        if sid in string_descs:
+            m.add_string_desc(string_descs[sid])
+
     m.add_interface_desc(interface_desc)
-    m.add_mikrobus_desc(mikrobus_desc)
+
+    if include_mikrobus and mikrobus_desc is not None:
+        m.add_mikrobus_desc(mikrobus_desc)
+
     for d in bundle_descs:
         m.add_bundle_desc(bundle_descs[d])
     for d in cport_descs:
         m.add_cport_desc(cport_descs[d])
-    for d in device_descs:
-        m.add_device_desc(device_descs[d])
-    for d in property_descs:
-        m.add_property_desc(property_descs[d])
+
+    if include_device:
+        for d in device_descs:
+            m.add_device_desc(device_descs[d])
+    if include_property:
+        for d in property_descs:
+            m.add_property_desc(property_descs[d])
     return m
 
 

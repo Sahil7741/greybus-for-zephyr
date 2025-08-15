@@ -132,8 +132,16 @@
 
 	};
 
+	/*
+	 * Greybus DEVICE descriptors are not supported by the current
+	 * Linux BeaglePlay greybus host driver in this tree and cause
+	 * manifest parsing to fail, leading to immediate disconnect.
+	 * Disable these entries so the host parses the manifest and
+	 * connects GPIO/I2C cports successfully. Bind I2C clients on
+	 * the host using /sys/bus/i2c/.../new_device instead.
+	 */
 	gbdevice0 {
-		status = "okay";
+		status = "disabled";
 		compatible = "zephyr,greybus-device";
 		id = <1>;
 		driver-string-id = <&gbstring3>;
@@ -142,7 +150,7 @@
 	};
 
 	gbdevice1 {
-		status = "okay";
+		status = "disabled";
 		compatible = "zephyr,greybus-device";
 		id = <2>;
 		driver-string-id = <&gbstring4>;

@@ -9,9 +9,28 @@ function(devicetree_unfixed_h_to_mnfs
     source_file    # The source file to be converted
     generated_file # The generated file
     )
+  # Determine which optional descriptors to include based on Kconfig
+  # MikroBUS/DEVICE/PROPERTY are non-standard on Linux; include only when enabled.
+  set(_GBUTIL_INCLUDE_MIKROBUS "0")
+  if(CONFIG_GREYBUS_MIKROBUS)
+    set(_GBUTIL_INCLUDE_MIKROBUS "1")
+  endif()
+  set(_GBUTIL_INCLUDE_DEVICE "0")
+  if(CONFIG_GREYBUS_INCLUDE_DEVICE_DESC)
+    set(_GBUTIL_INCLUDE_DEVICE "1")
+  endif()
+  set(_GBUTIL_INCLUDE_PROPERTY "0")
+  if(CONFIG_GREYBUS_INCLUDE_PROPERTY_DESC)
+    set(_GBUTIL_INCLUDE_PROPERTY "1")
+  endif()
+
   add_custom_command(
     OUTPUT ${generated_file}
     COMMAND
+    ${CMAKE_COMMAND} -E env
+    GBUTIL_INCLUDE_MIKROBUS_DESC=${_GBUTIL_INCLUDE_MIKROBUS}
+    GBUTIL_INCLUDE_DEVICE_DESC=${_GBUTIL_INCLUDE_DEVICE}
+    GBUTIL_INCLUDE_PROPERTY_DESC=${_GBUTIL_INCLUDE_PROPERTY}
     ${PYTHON_EXECUTABLE}
     ${G4Z_DIR}/scripts/gbutil.py
     ${ARGN} # Extra arguments are passed to gbutil.py
