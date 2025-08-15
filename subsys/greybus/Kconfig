@@ -309,6 +309,22 @@ config GREYBUS_MIKROBUS
       official Greybus specification. If you're not using MikroBUS boards,
       you can disable this to ensure compatibility with standard kernels.
 
+config GREYBUS_INCLUDE_DEVICE_DESC
+    bool "Include Zephyr-specific Greybus DEVICE descriptors in manifest"
+    default n
+    help
+      Include Greybus DEVICE descriptors produced from devicetree nodes
+      (zephyr,greybus-device). These are not supported by the standard
+      Linux Greybus host and should usually stay disabled.
+
+config GREYBUS_INCLUDE_PROPERTY_DESC
+    bool "Include Zephyr-specific Greybus PROPERTY descriptors in manifest"
+    default n
+    help
+      Include Greybus PROPERTY descriptors produced from devicetree nodes
+      (zephyr,greybus-property). These are not supported by the standard
+      Linux Greybus host and should usually stay disabled.
+
 module = GREYBUS
 module-str = Greybus
 source "subsys/logging/Kconfig.template.log_config"
